@@ -465,3 +465,69 @@ movements.sort((a, b) => b - a);
 console.log(movements);
 
 
+
+const arr1 = [3, 4, 5, 6, 7, 8, 9];
+console.log(new Array(2, 3, 5, 6, 4, 8));
+
+//Empty arrays + fill method
+const x = new Array(7);
+console.log(x);
+//console.log(x.map(() => 5));
+x.fill(1);
+x.fill(1, 3, 5);
+console.log(x);
+
+arr1.fill(23, 4, 6);
+console.log(arr1);
+
+//Array.from
+const z = Array.from({length: 7}, () => 1);
+console.log(z);
+
+const y = Array.from({length: 7}, (cur, i) => i + 1);
+console.log(y);
+
+labelBalance.addEventListener('click', function () {
+    const movementsUI = Array.from(document.querySelectorAll('.movements__value'), el => Number(el.textContent.replace('EUR', '')));
+    console.log(movementsUI);
+  
+    const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+  });
+
+//Array method practice
+
+//1. Calculate how much has been deposited in total across the bank
+const bankDepositSum = accounts.flatMap(acc => acc.movements).filter(mov => mov > 0).reduce((sum, cur) => sum + cur, 0);
+console.log(bankDepositSum);
+
+//2. Count how many deposits is there in the bank with atleast 1000
+//const numDeposit = accounts.flatMap(acc => acc.movements).filter(mov => mov > 1000).length;
+const numDeposit = accounts.flatMap(acc => acc.movements).reduce((count, cur) => (cur >= 1000 ? ++count : count) , 0);
+console.log(numDeposit);
+
+//3. Create an object which contains sum of the deposits and withdrawals.
+const {deposits, withdrawals} = accounts.flatMap(acc => acc.movements).reduce((sums, cur) => {
+   // cur > 0 ? sums.deposits += cur : sums.withdrawals += cur;
+   sums[cur > 0 ? 'deposits' : 'withdrawals'] += cur;
+    return sums;
+}, {deposits: 0, withdrawals: 0});
+
+console.log(deposits, withdrawals);
+
+//4. Create a simple function to convert any string to a titlecase
+const convertTitleCase = function(title){
+    const capitalize = str => str[0].toUpperCase() + str.slice(1);
+
+  const exceptions = ['a', 'an', 'and', 'the', 'its', 'are', 'on', 'in', 'with'];
+
+  const titleCase = title
+    .toLowerCase()
+    .split(' ')
+    .map(word => (exceptions.includes(word) ? word : capitalize(word)))
+    .join(' ');
+
+  return capitalize(titleCase);
+};
+console.log(convertTitleCase('hey all how are you'));
+console.log(convertTitleCase('hope YOU are doing well'));
+console.log(convertTitleCase('its great to MEET you all'));
