@@ -185,14 +185,39 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = function(){
+  const tick = function(){
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+  //In each call, print the remaining time to UI
+    labelTimer.textContent = `${min}:${sec}`;
+
+  //When 0 seconds, stop timer and log out user
+  if(time === 0){
+    clearInterval(timer);
+    labelWelcome.textContent = `Login to get started`;
+    containerApp.style.opacity = 0;
+    }
+    //decrease 1s
+    time--;
+  }
+  //set time to 2 minutes
+  let time = 120;
+  //call the timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+  //
+}
+
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
 //Fake always logged in
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+//currentAccount = account1;
+//updateUI(currentAccount);
+//containerApp.style.opacity = 100;
 
 //Experimenting API
 const now = new Date();
@@ -251,6 +276,10 @@ labelDate.textContent = new Intl.DateTimeFormat(currentAccount.locale, options).
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    //Timer
+    if(timer) clearInterval(timer);
+    timer = startLogOutTimer();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -264,12 +293,7 @@ btnTransfer.addEventListener('click', function (e) {
   );
   inputTransferAmount.value = inputTransferTo.value = '';
 
-  if (
-    amount > 0 &&
-    receiverAcc &&
-    currentAccount.balance >= amount &&
-    receiverAcc?.username !== currentAccount.username
-  ) {
+  if (amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username) {
     // Doing the transfer
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
@@ -280,6 +304,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    //Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -289,6 +317,7 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    setTimeout(function(){
     // Add movement
     currentAccount.movements.push(amount);
 
@@ -297,8 +326,13 @@ btnLoan.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
-  }
+    //Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
+    }, 2500);
+  };
   inputLoanAmount.value = '';
+
 });
 
 btnClose.addEventListener('click', function (e) {
@@ -499,7 +533,7 @@ console.log(+future);
 const daysPassed = (date1, date2) => Math.abs(date2 - date1) / (1000 * 60 * 60 * 24);
 
 const days1 = daysPassed(new Date(2035, 5, 15), new Date(2035, 5, 25));
-console.log(days1);*/
+console.log(days1);
 
 const num = 54455425.78;
 
@@ -512,4 +546,17 @@ const options1 = {
 console.log('US:', new Intl.NumberFormat('en-US', options1).format(num));
 console.log('Germany:', new Intl.NumberFormat('de-DE', options1).format(num));
 console.log('Syria:', new Intl.NumberFormat('ar-SY', options1).format(num));
-console.log(navigator.language, new Intl.NumberFormat(navigator.language, options1).format(num));
+console.log(navigator.language, new Intl.NumberFormat(navigator.language, options1).format(num));*/
+
+//setTimeout()
+const ingredients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout((ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2}`), 3000, ...ingredients);
+console.log('Waiting...');
+
+if(ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+
+//setInterval()
+setInterval(function(){
+  const now = new Date();
+  console.log(now.getDate());
+}, 1000);
