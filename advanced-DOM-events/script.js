@@ -1,13 +1,14 @@
 'use strict';
 
-/////////////////////////////////////////////////////////////
-// Modal window
-
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
+/////////////////////////////////////////////////////////////
+// Modal window
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove('hidden');
@@ -29,6 +30,66 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
+
+///////////////////////////////////////
+// Button scrolling
+btnScrollTo.addEventListener('click', function (e) {
+  const s1coords = section1.getBoundingClientRect();
+  console.log(s1coords);
+
+  console.log(e.target.getBoundingClientRect());
+
+  console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
+
+  console.log(
+    'height/width viewport',
+    document.documentElement.clientHeight,
+    document.documentElement.clientWidth
+  );
+
+  // Scrolling
+  // window.scrollTo(
+  //   s1coords.left + window.pageXOffset,
+  //   s1coords.top + window.pageYOffset
+  // );
+
+  // window.scrollTo({
+  //   left: s1coords.left + window.pageXOffset,
+  //   top: s1coords.top + window.pageYOffset,
+  //   behavior: 'smooth',
+  // });
+
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+////////////////////////////////////////////
+//Page navigation
+/*
+document.querySelectorAll('.nav__link').forEach(function(el){
+  el.addEventListener('click', function(e){
+    e.preventDefault();
+    const id = this.getAttribute('href');
+    console.log(id);
+    document.querySelector(id).scrollIntoView({behavior: 'smooth'});
+  });
+});*/
+
+//1. Add eventListener to common paarent element
+//2. Determine what element originated the event
+document.querySelector('.nav__links').addEventListener('click', function(e){
+  e.preventDefault();
+
+  //Matching stratergy
+  if(e.target.classList.contains('nav__link')){
+    const id = e.target.getAttribute('href');
+    console.log(id);
+    document.querySelector(id).scrollIntoView({behavior: 'smooth'});
+  }
+});
+
+
+
+
 
 /*
 ////////////////////////////////////////////////////////////////////
@@ -111,18 +172,46 @@ logo.classList.toggle('g');
 logo.classList.contains('p');
 
 //Dont use this because it overwrites all the existing classes
-logo.className = 'kavana';
-*/
+logo.className = 'kavana';*/
 
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
+//Event Handling
+const h1 = document.querySelector('h1');
 
-btnScrollTo.addEventListener('click', function (e) {
-  const s1coords = section1.getBoundingClientRect();
-  console.log(s1coords);
+const alertH1 = function(e){
+  alert('addEventListener: Great!!! You are reading the heading:)');
+};
+h1.addEventListener('mouseenter', alertH1);
 
-  console.log(e.target.getBoundingClientRect());
+setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
 
-  console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset);
+
+h1.onmouseenter = function(e){
+  alert('addEventListener: Great!!! You are reading the heading:)');
+};
+
+//Event Propagation
+//rgb(255, 255, 255)
+const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+const randomColor = () => `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)}, ${randomInt(0, 255)})`;
+console.log(randomColor(0, 255));
+
+document.querySelector('.nav__link').addEventListener('click', function(e) {
+  this.style.backgroundColor = randomColor();
+  console.log('You clicked link😜', e.target, e.currentTarget);
+  console.log(e.currentTarget === this);
+
+  //stop propogation
+  //e.stopPropagation();
 });
+
+document.querySelector('.nav__links').addEventListener('click', function(e) {
+  this.style.backgroundColor = randomColor();
+  console.log('You clicked container😜', e.target, e.currentTarget);
+});
+
+document.querySelector('.nav').addEventListener('click', function(e) {
+  this.style.backgroundColor = randomColor();
+  console.log('You clicked nav😜', e.target, e.currentTarget);
+});
+
 
