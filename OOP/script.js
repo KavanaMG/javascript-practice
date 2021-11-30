@@ -28,6 +28,14 @@ const meena = "Meena";
 console.log(kavana instanceof Person);
 console.log(meena instanceof Person);//false: because we did not create object for the constructor functions
 
+//instance method
+Person.hey = function(){
+    console.log('Hey there🖐');
+    console.log(this);
+};
+Person.hey();
+
+
 //Prototypes
 console.log(Person.prototype);
 
@@ -71,3 +79,81 @@ console.log(arr.unique());
 
 const h1 = document.querySelector('h1');
 console.dir(x => x + 1);
+
+//ES6 class
+//class expression
+//const PersonCl = class {}
+
+//class declaration
+class PersonCl {
+    constructor(fullName, birthYear) {
+      this.fullName = fullName;
+      this.birthYear = birthYear;
+    }
+  
+    // Instance methods
+    // Methods will be added to .prototype property
+    calcAge() {
+      console.log(2037 - this.birthYear);
+    }
+  
+    greet() {
+      console.log(`Hey ${this.fullName}`);
+    }
+  
+    get age() {
+      return 2037 - this.birthYear;
+    }
+  
+    // Set a property that already exists
+    set fullName(name) {
+      if (name.includes(' ')) this._fullName = name;
+      else alert(`${name} is not a full name😐`);
+    }
+  
+    get fullName() {
+      return this._fullName;
+    }
+
+    //static method
+    static hey() {
+            console.log('Hey there🖐');
+            console.log(this);
+    }
+}
+
+const sahana = new PersonCl('Sahana Meenaganesh', 1995);
+console.log(sahana);
+puneeth.calcAge();
+console.log(sahana.age);
+console.log(sahana.__proto__ === PersonCl.prototype);
+
+//PersonCl.prototype.greet = function(){
+//   console.log(`Hey ${this.firstName}`);
+//};
+sahana.greet();
+
+PersonCl.hey();
+
+//a. Classes are NOT hoisted
+//b. Classes are first-class citizens(We can pass them to the functions and return from the functions as well)
+//c. Classes are executed in strict mode
+
+//setters and getters
+const account = {
+    owner: 'kavana',
+    movements: [200,400, 500, 800],
+
+    get latest(){
+        return this.movements.slice(-1).pop();
+    },
+
+    set latest(mov){
+        this.movements.push(mov);
+    },
+};
+
+console.log(account.latest);
+account.latest = 100;
+console.log(account.movements);
+
