@@ -155,7 +155,7 @@ const account = {
 
 console.log(account.latest);
 account.latest = 100;
-console.log(account.movements);*/
+console.log(account.movements);
 
 const PersonProto = {
     calcAge() {
@@ -177,4 +177,40 @@ console.log(ganesh.__proto__ === PersonProto);
 
 const dhanush = Object.create(PersonProto);
 dhanush.init('Dhanush', 1995);
-dhanush.calcAge();
+dhanush.calcAge();*/
+
+const Person = function(firstName, birthYear){
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+};
+
+Person.prototype.calcAge = function () {
+    console.log(2037 - this.birthYear);
+};
+
+const Student = function(firstName, birthYear, course){
+    Person.call(this, firstName, birthYear);
+    this.course = course;
+};
+
+//Linking prototypes
+Student.prototype = Object.create(Person.prototype);
+
+
+Student.prototype.introduce = function(){
+    console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+const vaish = new Student('Vaish', 2009, 'Computer Science');
+console.log(vaish);
+vaish.introduce();
+vaish.calcAge();
+
+console.log(vaish.__proto__);
+console.log(vaish.__proto__.__proto__);
+
+console.log(vaish instanceof Student);
+console.log(vaish instanceof Person);
+console.log(vaish instanceof Object);
+
+Student.prototype.constructor = Student;
+console.dir(Student.prototype.constructor);
