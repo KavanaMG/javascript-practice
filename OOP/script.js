@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 const Person = function(firstName, birthYear){
     //Instance properties
     this.firstName = firstName;
@@ -155,5 +155,26 @@ const account = {
 
 console.log(account.latest);
 account.latest = 100;
-console.log(account.movements);
+console.log(account.movements);*/
 
+const PersonProto = {
+    calcAge() {
+        console.log(2037 - this.birthYear);
+    },
+
+    init(firstName, birthYear) {
+        this.firstName = firstName;
+        this.birthYear = birthYear;
+    },
+};
+
+const ganesh = Object.create(PersonProto);
+console.log(ganesh);
+ganesh.name = 'Ganesh';
+ganesh.birthYear = 1975;
+ganesh.calcAge();
+console.log(ganesh.__proto__ === PersonProto);
+
+const dhanush = Object.create(PersonProto);
+dhanush.init('Dhanush', 1995);
+dhanush.calcAge();
