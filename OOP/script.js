@@ -269,7 +269,7 @@ class StudentCl extends PersonCl {
 
 const jay = new StudentCl('Jaya Priya', 2010, 'Computer Science');
 jay.introduce();
-jay.calcAge();*/
+jay.calcAge();
 
 //Inheritance between classes: Object.create
 const PersonProto = {
@@ -296,5 +296,47 @@ StudentProto.introduce = function() {
 const meena = Object.create(StudentProto);
 meena.init('Meena', 2010, 'Computer Science');
 meena.introduce();
-meena.calcAge();
+meena.calcAge();*/
+
+class Account {
+    constructor(owner, currency, pin) {
+        this.owner = owner;
+        this.currency = currency;
+        this.pin = pin;
+        this.movements = [];
+        this.locale = navigator.language;
+
+        console.log(`Thanks for opening the account ${this.owner}😍`)
+    }
+
+    deposit(val) {
+        this.movements.push(val);
+    }
+
+    withdrawal(val) {
+        this.deposit(-val);
+    }
+
+    approveLoan() {
+       return true;
+    }
+
+    requestLoan(val) {
+        if(this.approveLoan(val)) {
+            this.deposit(val);
+            console.log(`Loan approved`);
+        }
+    }
+}
+
+const acc1 = new Account('Kavana', 'EUR', 5755);
+
+//acc1.movements.push(250);
+//acc1.movements.push(-140);
+
+acc1.deposit(145);
+acc1.deposit(1000);
+acc1.withdrawal(300);
+acc1.requestLoan(5000);
+console.log(acc1);
 
