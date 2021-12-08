@@ -157,6 +157,7 @@ console.log(account.latest);
 account.latest = 100;
 console.log(account.movements);
 
+//Object.create
 const PersonProto = {
     calcAge() {
         console.log(2037 - this.birthYear);
@@ -215,7 +216,7 @@ console.log(vaish instanceof Person);
 console.log(vaish instanceof Object);
 
 Student.prototype.constructor = Student;
-console.dir(Student.prototype.constructor);*/
+console.dir(Student.prototype.constructor);
 
 //Inheritance Between Classes: ES6 Classes
 class PersonCl {
@@ -268,4 +269,32 @@ class StudentCl extends PersonCl {
 
 const jay = new StudentCl('Jaya Priya', 2010, 'Computer Science');
 jay.introduce();
-jay.calcAge();
+jay.calcAge();*/
+
+//Inheritance between classes: Object.create
+const PersonProto = {
+    calcAge() {
+        console.log(2037 - this.birthYear);
+    },
+
+    init(firstName, birthYear) {
+        this.firstName = firstName;
+        this.birthYear = birthYear;
+    },
+};
+
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function(firstName, birthYear, course) {
+    PersonProto.init.call(this, firstName, birthYear);
+    this.course = course;
+}
+
+StudentProto.introduce = function() {
+    console.log(`My name is ${this.firstName} and I study ${this.course}`);
+} 
+
+const meena = Object.create(StudentProto);
+meena.init('Meena', 2010, 'Computer Science');
+meena.introduce();
+meena.calcAge();
+
